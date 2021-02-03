@@ -37,14 +37,13 @@ FROM ubuntu
 
 # stage 1
 FROM node:14.7.0-alpine as node
-# WORKDIR /usr/src/app
+WORKDIR /app
 COPY . .
 RUN npm install
-# RUN npm install npm@7.5.2
-RUN npm run build
+RUN npm run build --prod
 
 # stage 2
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 WORKDIR /usr/share/nginx/html
-COPY --from=node /usr/src/app/dist/angular9 /usr/share/nginx/html
+COPY --from=node /app/dist/angular9 /usr/share/nginx/html
